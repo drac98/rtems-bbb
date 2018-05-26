@@ -18,3 +18,6 @@
 	path = tools/device-tree-rebasing
 	url = git://xenbits.xen.org/people/ianc/device-tree-rebasing.git
 	branch = master
+[submodule "apps/fio"]
+	path = apps/fio
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/axboe/fio.git
