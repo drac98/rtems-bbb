@@ -23,5 +23,6 @@ PARTITION_DIR="${PROJECTDIR}/tools/partition"
 BSP_CONFIG_OPT="
 	--enable-tests=samples
 	--disable-networking
+	--enable-posix
 	CONSOLE_POLLED=1
 	"
