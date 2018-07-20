@@ -20,4 +20,4 @@
 	branch = master
 [submodule "apps/fio"]
 	path = apps/fio
-	url = git://git.kernel.org/pub/scm/linux/kernel/git/axboe/fio.git
+	url = ../rtems-fio.git
