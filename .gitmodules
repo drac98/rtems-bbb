@@ -20,4 +20,7 @@
 	branch = master
 [submodule "apps/fio"]
 	path = apps/fio
-	url = ../rtems-fio.git
+	url = ../../rtems-fio.git
+[submodule "libs/rtems-yaffs2"]
+	path = libs/rtems-yaffs2
+	url = https://git.rtems.org/sebh/rtems-yaffs2.git/
