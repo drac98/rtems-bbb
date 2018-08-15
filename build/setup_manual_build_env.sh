@@ -15,11 +15,12 @@ set -e -u
 
 # find out own directory
 SCRIPTDIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-PROJECTDIR="${SCRIPTDIR}/../"
+export PROJECTDIR="${SCRIPTDIR}/../"
 
 # Configuration
 . "${SCRIPTDIR}/configuration.sh"
 ADDPATH=`readlink -f "${PREFIX}/bin"`
+export PREFIX
 export PATH="${ADDPATH}:${PATH}"
 
 export PREPROMPT="%B(BBB-RTEMS)%b "
