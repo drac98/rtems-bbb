@@ -10,3 +10,6 @@
 	path = tools/rtems-source-builder
 	url = ../rtems-source-builder.git
 	branch = master
+[submodule "tools/qemu"]
+	path = tools/qemu
+	url = git://git.qemu.org/qemu.git

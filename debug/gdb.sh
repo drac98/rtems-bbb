@@ -1,7 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 # find out own directory
 SCRIPTDIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 PROJECTDIR="${SCRIPTDIR}/../"
 
-${PROJECTDIR}/install/rtems/5/bin/arm-rtems5-gdb -x ${SCRIPTDIR}/start.gdb $@
+# configuration
+. "${PROJECTDIR}/build/configuration.sh"
+
+PORT=1234
+
+${PREFIX}/bin/${RTEMS_CPU}-rtems${RTEMS_VERSION}-gdb -x ${SCRIPTDIR}/start.gdb $@ \
+	-ex "reset" \
+	$BINARY

@@ -22,6 +22,6 @@ PROJECTDIR="${SCRIPTDIR}/../"
 ADDPATH=`readlink -f "${PREFIX}/bin"`
 export PATH="${ADDPATH}:${PATH}"
 
-export PREPROMPT="%B(BBB-RTEMS)%b "
+export PREPROMPT="%B(QEMU-RTEMS)%b "
 
 ${SHELL}

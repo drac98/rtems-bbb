@@ -44,6 +44,9 @@ then
 	cd "${LIBBSD_SOURCE_DIR}"
 	git submodule init
 	git submodule update rtems_waf
+	cd "${QEMU_SOURCE_DIR}"
+	git submodule init
+	git submodule update --recursive
 fi
 
 # build parts

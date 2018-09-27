@@ -11,6 +11,7 @@ PREFIX="${PROJECTDIR}/install/rtems/${RTEMS_VERSION}/"
 RSB_DIR="${PROJECTDIR}/tools/rtems-source-builder"
 RTEMS_SOURCE_DIR="${PROJECTDIR}/libs/rtems"
 LIBBSD_SOURCE_DIR="${PROJECTDIR}/libs/rtems-libbsd"
+QEMU_SOURCE_DIR="${PROJECTDIR}/tools/qemu"
 
 BSP_CONFIG_OPT="
 	--enable-tests=samples
