@@ -54,16 +54,16 @@ then
 	fi
 fi
 
-waf configure \
+./waf configure \
 	--prefix="${PREFIX}" \
 	--rtems-bsps="${RTEMS_CPU}/${BSP_NAME}" \
-	--buildset="buildset/everything.ini" \
+	--buildset="${SCRIPTDIR}/src/noipsec.ini" \
 	--optimization=0
-waf
+./waf
 
 if [ $DO_INSTALL -ne 0 ]
 then
-	waf install
+	./waf install
 fi
 
 if [ "$BSP_NAME" = "atsamv" ]
