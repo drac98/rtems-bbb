@@ -82,13 +82,13 @@ union multiptr {
 	unsigned long *p32;
 };
 
-static int fbsize;
+static size_t fbsize;
 static unsigned char *fbuffer;
 static unsigned char **line_addr;
 static int fb_fd=0;
 static int bytes_per_pixel;
 static unsigned colormap [256];
-uint32_t xres, yres;
+unsigned xres, yres;
 
 static char *defaultfbdevice = "/dev/fb0";
 static char *fbdevice = NULL;
@@ -98,7 +98,7 @@ int open_framebuffer(void)
 	int y;
 	unsigned addr;
 	struct fbtype fb;
-	int line_length;
+	unsigned line_length;
 
 	if ((fbdevice = getenv ("TSLIB_FBDEVICE")) == NULL)
 		fbdevice = defaultfbdevice;
@@ -120,11 +120,11 @@ int open_framebuffer(void)
 		return -1;
 	}
 
-	xres = fb.fb_width;
-	yres = fb.fb_height;
+	xres = (unsigned) fb.fb_width;
+	yres = (unsigned) fb.fb_height;
 
-	int pagemask = getpagesize() - 1;
-	fbsize = ((int) line_length*yres + pagemask) & ~pagemask;
+	unsigned pagemask = (unsigned) getpagesize() - 1;
+	fbsize = ((line_length*yres + pagemask) & ~pagemask);
 
 	fbuffer = (unsigned char *)mmap(0, fbsize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, 0);
 	if (fbuffer == (unsigned char *)-1) {
@@ -135,7 +135,7 @@ int open_framebuffer(void)
 	memset(fbuffer,0, fbsize);
 
 	bytes_per_pixel = (fb.fb_depth + 7) / 8;
-	line_addr = malloc (sizeof (uint32_t) * fb.fb_height);
+	line_addr = malloc (sizeof (char*) * yres);
 	addr = 0;
 	for (y = 0; y < fb.fb_height; y++, addr += line_length)
 		line_addr [y] = fbuffer + addr;
@@ -155,7 +155,7 @@ int close_framebuffer(void)
 void setcolor(unsigned colidx, unsigned value)
 {
 	unsigned res;
-	unsigned char red, green, blue;
+	unsigned red, green, blue;
 
 #ifdef DEBUG
 	if (colidx > 255) {
@@ -187,15 +187,14 @@ void setcolor(unsigned colidx, unsigned value)
 
 void setcolor_rgb(
     unsigned colidx,
-    unsigned char red,
-    unsigned char green,
-    unsigned char blue
+    unsigned red,
+    unsigned green,
+    unsigned blue
 )
 {
-	unsigned res;
 	unsigned value;
 
-	value = red << 16 + green << 8 + blue;
+	value = (red << 16) | (green << 8) | blue;
 
 	setcolor(colidx, value);
 }
@@ -206,27 +205,27 @@ static inline void __setpixel (union multiptr loc, unsigned xormode, unsigned co
 	case 1:
 	default:
 		if (xormode)
-			*loc.p8 ^= color;
+			*loc.p8 ^= (unsigned char)color;
 		else
-			*loc.p8 = color;
+			*loc.p8 = (unsigned char)color;
 		pwrite(fb_fd, loc.p8, sizeof(loc.p16), 0);
 		break;
 	case 2:
 		if (xormode)
-			*loc.p16 ^= color;
+			*loc.p16 ^= (unsigned short)color;
 		else
-			*loc.p16 = color;
+			*loc.p16 = (unsigned short)color;
 		pwrite(fb_fd, loc.p16, sizeof(loc.p16), 0);
 		break;
 	case 3:
 		if (xormode) {
-			*loc.p8++ ^= (color >> 16) & 0xff;
-			*loc.p8++ ^= (color >> 8) & 0xff;
-			*loc.p8 ^= color & 0xff;
+			*loc.p8++ ^= (unsigned char)(color >> 16) & 0xff;
+			*loc.p8++ ^= (unsigned char)(color >> 8) & 0xff;
+			*loc.p8 ^= (unsigned char)color & 0xff;
 		} else {
-			*loc.p8++ = (color >> 16) & 0xff;
-			*loc.p8++ = (color >> 8) & 0xff;
-			*loc.p8 = color & 0xff;
+			*loc.p8++ = (unsigned char)(color >> 16) & 0xff;
+			*loc.p8++ = (unsigned char)(color >> 8) & 0xff;
+			*loc.p8 = (unsigned char)color & 0xff;
 		}
 		pwrite(fb_fd, loc.p8, sizeof(loc.p8), 0);
 		break;
@@ -316,18 +315,18 @@ void solidrect (int x1, int y1, int x2, int y2, unsigned colidx)
 }
 
 void
-rtemslogo (size_t screen_x, size_t screen_y)
+rtemslogo (unsigned screen_x, unsigned screen_y)
 {
 	size_t i;
-	size_t x, y;
-	size_t offset_x, offset_y;
+	int x, y;
+	int offset_x, offset_y;
 	char *data = RTEMSorg_data;
 
 	assert(screen_x > RTEMSorg_width);
 	assert(screen_y > RTEMSorg_height);
 
-	offset_x = (screen_x - RTEMSorg_width) / 2;
-	offset_x = (screen_x - RTEMSorg_height) / 2;
+	offset_x = (int)(screen_x - RTEMSorg_width) / 2;
+	offset_y = (int)(screen_y - RTEMSorg_height) / 2;
 
 	for(i = 0;
 	    i < sizeof(RTEMSorg_data_cmap)/sizeof(RTEMSorg_data_cmap[0]);
@@ -336,8 +335,8 @@ rtemslogo (size_t screen_x, size_t screen_y)
 		    RTEMSorg_data_cmap[i][1], RTEMSorg_data_cmap[i][2]);
 	}
 
-	for(x = 0; x < RTEMSorg_width; ++x) {
-		for(y = 0; y < RTEMSorg_height; ++y) {
+	for(y = 0; y < (int)RTEMSorg_height; ++y) {
+		for(x = 0; x < (int)RTEMSorg_width; ++x) {
 			pixel(x+offset_x, y+offset_y, *data);
 			++data;
 		}
