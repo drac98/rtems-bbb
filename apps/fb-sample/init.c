@@ -45,6 +45,8 @@
 
 #include <bsp.h>
 
+#include "RTEMSorg.h"
+
 #define PRIO_SHELL		150
 #define PRIO_WPA		(RTEMS_MAXIMUM_PRIORITY - 1)
 #define PRIO_INIT_TASK		(RTEMS_MAXIMUM_PRIORITY - 1)
@@ -180,7 +182,22 @@ void setcolor(unsigned colidx, unsigned value)
 		res = value;
 
 	}
-		colormap [colidx] = res;
+	colormap [colidx] = res;
+}
+
+void setcolor_rgb(
+    unsigned colidx,
+    unsigned char red,
+    unsigned char green,
+    unsigned char blue
+)
+{
+	unsigned res;
+	unsigned value;
+
+	value = red << 16 + green << 8 + blue;
+
+	setcolor(colidx, value);
 }
 
 static inline void __setpixel (union multiptr loc, unsigned xormode, unsigned color)
@@ -299,6 +316,35 @@ void solidrect (int x1, int y1, int x2, int y2, unsigned colidx)
 }
 
 void
+rtemslogo (size_t screen_x, size_t screen_y)
+{
+	size_t i;
+	size_t x, y;
+	size_t offset_x, offset_y;
+	char *data = RTEMSorg_data;
+
+	assert(screen_x > RTEMSorg_width);
+	assert(screen_y > RTEMSorg_height);
+
+	offset_x = (screen_x - RTEMSorg_width) / 2;
+	offset_x = (screen_x - RTEMSorg_height) / 2;
+
+	for(i = 0;
+	    i < sizeof(RTEMSorg_data_cmap)/sizeof(RTEMSorg_data_cmap[0]);
+	    ++i) {
+		setcolor_rgb(i, RTEMSorg_data_cmap[i][0],
+		    RTEMSorg_data_cmap[i][1], RTEMSorg_data_cmap[i][2]);
+	}
+
+	for(x = 0; x < RTEMSorg_width; ++x) {
+		for(y = 0; y < RTEMSorg_height; ++y) {
+			pixel(x+offset_x, y+offset_y, *data);
+			++data;
+		}
+	}
+}
+
+void
 libbsdhelper_start_shell(rtems_task_priority prio)
 {
 	rtems_status_code sc = rtems_shell_init(
@@ -328,12 +374,7 @@ Init(rtems_task_argument arg)
 	assert(sc == RTEMS_SUCCESSFUL);
 	exit_code = open_framebuffer();
 	assert(exit_code == 0);
-	setcolor (4, 0xff0000);
-	rect(100, 100, 200, 200, 4);
-	setcolor (5, 0x00ff00);
-	solidrect(200, 200, 300, 400, 5);
-	setcolor (6, 0x0000ff);
-	solidrect(300, 300, 500, 400, 6);
+	rtemslogo(xres, yres);
 	exit_code = close_framebuffer();
 	/* Some time for USB device to be detected. */
 //	rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(4000));
