@@ -366,17 +366,13 @@ Init(rtems_task_argument arg)
 
 	(void)arg;
 
-	puts("\nRTEMS I2C TEST\n");
-	exit_code = bbb_register_i2c_0();
-	assert(exit_code == 0);
+	puts("\nRTEMS FRAMEBUFFER SAMPLE\n");
 	sc = rtems_bsd_initialize();
 	assert(sc == RTEMS_SUCCESSFUL);
 	exit_code = open_framebuffer();
 	assert(exit_code == 0);
 	rtemslogo(xres, yres);
 	exit_code = close_framebuffer();
-	/* Some time for USB device to be detected. */
-//	rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(4000));
 	libbsdhelper_start_shell(PRIO_SHELL);
 
 	exit(0);
