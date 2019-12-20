@@ -1,5 +1,5 @@
 install
-b-beagleboneblack
+b-raspberry*
 build/rsb-*.log
 tmp_sdcard_dir.20835
 *.dtb
