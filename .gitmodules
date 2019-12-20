@@ -10,7 +10,3 @@
 	path = tools/rtems-source-builder
 	url = ../rtems-source-builder.git
 	branch = master
-[submodule "u-boot"]
-	path = tools/u-boot
-	url = git://git.denx.de/u-boot.git
-	branch = master

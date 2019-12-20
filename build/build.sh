@@ -52,11 +52,7 @@ if [ ${DO_TOOLCHAIN} -ne 0 ]
 then
 	"${SCRIPTDIR}/build-toolchain.sh"
 fi
-"${SCRIPTDIR}/build-u-boot.sh"
-"${SCRIPTDIR}/build-newfs_msdos.sh"
-"${SCRIPTDIR}/build-partition.sh"
-"${SCRIPTDIR}/build-mtools.sh"
-"${SCRIPTDIR}/build-dtb.sh"
+#"${SCRIPTDIR}/build-dtb.sh"
 if [ ${DO_BOOTSTRAP} -ne 0 ]
 then
 	cd "${RTEMS_SOURCE_DIR}"
