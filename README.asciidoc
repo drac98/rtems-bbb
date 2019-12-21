@@ -65,3 +65,18 @@ and do some file transfers.
 Use an official up to date Linux image and replace kernel.img by one generated with:
 
     arm-rtems5-objcopy application.exe -Obinary kernel.img
+
+== Debugging
+
+Please take a look at pages like
+https://github.com/dwelch67/raspberrypi/tree/master/armjtag to find out how to
+connect a JTAG. Basically it works like follows:
+
+- Connect a JTAG to the correct pins.
+- Replace the kernel.img with an application that initializes the pins as JTAG
+  pins.
+- Boot the binary.
+- Start your JTAG tool.
+
+The `armjtag.bin` in `debug` is from that page (revision f97f30f) and works for
+initializing the pins on a Pi 1.

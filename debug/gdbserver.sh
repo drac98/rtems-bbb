@@ -1,3 +1,3 @@
 #!/bin/sh
 
-JLinkGDBServerCLExe -device AM3358 -if JTAG -speed 16000
+JLinkGDBServerCLExe -device ARM11 -endian little -if JTAG -speed 10000
