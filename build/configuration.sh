@@ -2,7 +2,7 @@
 # be already set:
 #   $PROJECTDIR -- set to the base dir of the project
 
-BSP_NAME="raspberrypi"
+BSP_NAME="raspberrypi2"
 RTEMS_CPU="arm"
 RTEMS_VERSION="5"
 TARGET="${RTEMS_CPU}-rtems${RTEMS_VERSION}"
@@ -17,4 +17,4 @@ BSP_CONFIG_OPT="
 	--disable-networking
 	"
 
-#export CFLAGS_OPTIMIZE_V="-O0 -g"
+export CFLAGS_OPTIMIZE_V="-O0 -g"

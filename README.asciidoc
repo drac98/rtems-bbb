@@ -68,15 +68,47 @@ Use an official up to date Linux image and replace kernel.img by one generated w
 
 == Debugging
 
-Please take a look at pages like
-https://github.com/dwelch67/raspberrypi/tree/master/armjtag to find out how to
-connect a JTAG. Basically it works like follows:
+=== Pi1
 
-- Connect a JTAG to the correct pins.
-- Replace the kernel.img with an application that initializes the pins as JTAG
-  pins.
-- Boot the binary.
-- Start your JTAG tool.
+See https://github.com/dwelch67/raspberrypi/tree/master/armjtag for details.
+Basically:
 
-The `armjtag.bin` in `debug` is from that page (revision f97f30f) and works for
-initializing the pins on a Pi 1.
+- Connect the JTAG pins correctly:
+
+rev1 raspberry pi boards (older boards)
+
+    ARM_VREF   P1-1
+    ARM_TRST   P1-15  (GPIO 22 ALT4)
+    ARM_TDI    P1-7   (GPIO  4 ALT5)
+    ARM_TMS    S5-11  (GPIO 27 ALT4)
+    ARM_TCK    P1-22  (GPIO 25 ALT4)
+    ARM_TDO    P1-18  (GPIO 24 ALT4)
+    ARM_GND    P1-25
+
+rev2 raspberry pi boards
+
+    ARM_VREF   P1-1
+    ARM_TRST   P1-15  (GPIO 22 ALT4)
+    ARM_TDI    P1-7   (GPIO  4 ALT5)
+    ARM_TMS    P1-13  (GPIO 27 ALT4)
+    ARM_TCK    P1-22  (GPIO 25 ALT4)
+    ARM_TDO    P1-18  (GPIO 24 ALT4)
+    ARM_GND    P1-25
+
+The repo also contains a `armjtag.bin` (copy in this repo in the `debug` folder)
+that sets up the correct alternative functions for the pins. Replace the
+`kernel.img` on your SD card with that file. Then start the system and connect
+the Debugger.
+
+=== Pi2 (and newer?)
+
+    ARM_VREF   P1-1
+    ARM_TRST   P1-15  (GPIO 22 ALT4)
+    ARM_TDI    P1-37  (GPIO 26 ALT4)
+    ARM_TMS    P1-13  (GPIO 27 ALT4)
+    ARM_TCK    P1-22  (GPIO 25 ALT4)
+    ARM_TDO    P1-18  (GPIO 24 ALT4)
+    ARM_GND    P1-25
+
+Use the binary and configuration from `debug/rpi2`. The binary is an endless
+loop. The configuration enables the debug pin.

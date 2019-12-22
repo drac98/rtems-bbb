@@ -10,3 +10,6 @@
 	path = tools/rtems-source-builder
 	url = ../rtems-source-builder.git
 	branch = master
+[submodule "debug/--force"]
+	path = debug/--force
+	url = https://github.com/c-mauderer/RaspberryPi_BareMetal.git
