@@ -35,7 +35,9 @@ SCRIPTDIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 PROJECTDIR="${SCRIPTDIR}/../"
 
 # configuration
-. "${SCRIPTDIR}/configuration.sh"
+PREFIX="${PROJECTDIR}/install/rtems/5/"
+UBOOT_CONFIG="am335x_boneblack_defconfig"
+DTB_INSTALL_NAME="am335x-boneblack.dtb"
 export PATH="${PREFIX}/bin:${PATH}"
 
 # we store all generated files here.
