@@ -58,8 +58,6 @@ Init(rtems_task_argument arg)
 	(void)arg;
 
 	puts("\nRTEMS WiFi Demo\n");
-	exit_code = bbb_register_i2c_0();
-	assert(exit_code == 0);
 
 	libbsdhelper_init_sd_card(PRIO_MEDIA_SERVER);
 	libbsdhelper_lower_self_prio(PRIO_INIT_TASK);
