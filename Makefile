@@ -17,7 +17,6 @@ SRC_DEVICETREE = $(PROJDIR)/devicetree
 SRC_NEWFS_MSDOS = $(PROJDIR)/tools/newfs_msdos
 SRC_PARTITION = $(PROJDIR)/tools/partition
 SRC_MTOOLS = $(PROJDIR)/tools/mtools
-FDT_MAIN_FILE = sys/gnu/dts/arm/am335x-boneblack.dts
 BUILD_BSP = $(PROJDIR)/build/b-$(BSP)
 TAGFILE = $(PROJDIR)/tags
 
