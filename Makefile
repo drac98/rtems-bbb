@@ -76,7 +76,7 @@ dtc:
 	cd $(RSB)/rtems && ../source-builder/sb-set-builder \
 		--log=$(RSB)/b-rsb-dtc-$(sh date +%Y%m%d_%H%M%S).log \
 		--prefix=$(PREFIX) \
-		devel/dtc
+		devel/dtc-1.6.0-1
 	rm -rf $(RSB)/rtems/build
 
 u-boot:
