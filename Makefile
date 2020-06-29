@@ -2,13 +2,13 @@
 MAKEFILE_DIR = $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 PROJDIR = $(MAKEFILE_DIR)
 
-RTEMS_VERSION = 5
+RTEMS_VERSION = 6
 
 MACHINE = arm
 BSP = beagleboneblack
 UBOOT_CONFIG="am335x_boneblack_defconfig"
 
-PREFIX = $(PROJDIR)/install/rtems/5
+PREFIX = $(PROJDIR)/install/rtems/$(RTEMS_VERSION)
 RSB = $(PROJDIR)/tools/rtems-source-builder
 SRC_RTEMS = $(PROJDIR)/libs/rtems
 SRC_LIBBSD = $(PROJDIR)/libs/rtems-libbsd
