@@ -31,7 +31,7 @@ help:
 	@ grep -B 1 '@##H##' $(firstword $(MAKEFILE_LIST)) \
 		| grep -v grep | grep -v -- "--" | sed -e 's/@##H##//g'
 
-setup: submodule-update toolchain u-boot dtb newfs-msdos partition mtools bootstrap bsp libbsd ctags
+setup: submodule-update toolchain u-boot dtb newfs-msdos partition mtools bsp libbsd ctags
 	@##H## Basic setup. Use with care.
 
 newfs-msdos:
@@ -95,45 +95,30 @@ dtb:
 	@##H## Create all device tree binaries.
 	make -C $(SRC_DEVICETREE) MACHINE=$(MACHINE) install
 
-bootstrap:
-	@##H## Execute bootstrap for RTEMS.
-	cd $(SRC_RTEMS) && $(RSB)/source-builder/sb-bootstrap
-
 bsp:
 	@##H## Build the BSP.
-	rm -rf $(BUILD_BSP)
-	mkdir -p $(BUILD_BSP)
-	cd $(BUILD_BSP) && $(SRC_RTEMS)/configure \
-		--target=$(MACHINE)-rtems$(RTEMS_VERSION) \
-		--prefix=$(PREFIX) \
-		--enable-posix \
-		--enable-rtemsbsp=$(BSP) \
-		--enable-maintainer-mode \
-		--enable-rtems-debug \
-		--disable-networking \
-		--enable-tests=samples \
-		CONSOLE_POLLED=1
-	cd $(BUILD_BSP) && make -j `nproc`
-	cd $(BUILD_BSP) && make -j `nproc` install
-	# Generate .mk file
-	mkdir -p "$(PREFIX)/make/custom/"
-	cat "$(PROJDIR)/build/src/bsp.mk" | \
-		sed 	-e "s/##RTEMS_API##/$(RTEMS_VERSION)/g" \
-			-e "s/##RTEMS_BSP##/$(BSP)/g" \
-			-e "s/##RTEMS_CPU##/$(MACHINE)/g" \
-		> "$(PREFIX)/make/custom/$(BSP).mk"
+	cd $(SRC_RTEMS) && ./waf clean || true
+	cd $(SRC_RTEMS) && ./waf bsp_defaults --rtems-bsps=$(BSP) > config.ini
+	cd $(SRC_RTEMS) && sed -i \
+		-e "s|RTEMS_POSIX_API = False|RTEMS_POSIX_API = True|" \
+		config.ini
+	cd $(SRC_RTEMS) && ./waf configure --prefix=$(PREFIX)
+	cd $(SRC_RTEMS) && ./waf
+	cd $(SRC_RTEMS) && ./waf install
 
 libbsd:
 	@##H## Build the libbsd.
 	rm -rf $(SRC_LIBBSD)/build
-	cd $(SRC_LIBBSD) && ./waf configure \
+	cd $(SRC_LIBBSD) && LDFLAGS="-Wl,--gc-sections" \
+		CFLAGS="-ffunction-sections -fdata-sections" ./waf configure \
 		--prefix=$(PREFIX) \
 		--rtems-bsps=$(MACHINE)/$(BSP) \
 		--buildset=$(PROJDIR)/build/src/noipsec.ini \
 		--enable-warnings \
-		--optimization=$(OPTIMIZATION)
+		--optimization=$(OPTIMIZATION) \
+		--rtems-version=6
 	cd $(SRC_LIBBSD) && ./waf
-	cd $(SRC_LIBBSD) && ./waf install
+	#cd $(SRC_LIBBSD) && ./waf install
 
 ctags:
 	@##H## Tags for VI
