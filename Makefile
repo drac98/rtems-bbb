@@ -12,6 +12,8 @@ PREFIX = $(PROJDIR)/install/rtems/$(RTEMS_VERSION)
 RSB = $(PROJDIR)/tools/rtems-source-builder
 SRC_RTEMS = $(PROJDIR)/libs/rtems
 SRC_LIBBSD = $(PROJDIR)/libs/rtems-libbsd
+SRC_APPS = $(PROJDIR)/apps
+SRC_LVGL = $(PROJDIR)/libs/rtems-littlevgl
 SRC_UBOOT = $(PROJDIR)/tools/u-boot
 SRC_DEVICETREE = $(PROJDIR)/devicetree
 SRC_NEWFS_MSDOS = $(PROJDIR)/tools/newfs_msdos
@@ -20,7 +22,7 @@ SRC_MTOOLS = $(PROJDIR)/tools/mtools
 BUILD_BSP = $(PROJDIR)/build/b-$(BSP)
 TAGFILE = $(PROJDIR)/tags
 
-OPTIMIZATION = 0
+OPTIMIZATION = 2
 
 export PREFIX
 export PATH := $(PREFIX)/bin:$(PATH)
@@ -31,7 +33,7 @@ help:
 	@ grep -B 1 '@##H##' $(firstword $(MAKEFILE_LIST)) \
 		| grep -v grep | grep -v -- "--" | sed -e 's/@##H##//g'
 
-setup: submodule-update toolchain u-boot dtb newfs-msdos partition mtools bsp libbsd ctags
+setup: submodule-update toolchain u-boot dtb newfs-msdos partition mtools sd-image-script bsp libbsd lvgl ctags
 	@##H## Basic setup. Use with care.
 
 newfs-msdos:
@@ -54,8 +56,11 @@ submodule-update:
 	git submodule update $(SRC_RTEMS)
 	git submodule update $(SRC_LIBBSD)
 	git submodule update $(SRC_UBOOT)
+	git submodule update $(SRC_LVGL)
 	cd $(SRC_LIBBSD) && git submodule init rtems_waf
 	cd $(SRC_LIBBSD) && git submodule update rtems_waf
+	cd $(SRC_LVGL) && git submodule init
+	cd $(SRC_LVGL) && git submodule update
 
 toolchain:
 	@##H## Build the toolchain.
@@ -91,6 +96,10 @@ u-boot:
 	mkdir -p $(PREFIX)/bin
 	cp $(SRC_UBOOT)/tools/mkimage $(PREFIX)/bin
 
+sd-image-script:
+	@##H## Copy script for creating sd images
+	cp $(PROJDIR)/build/create-sdcardimage.sh $(PREFIX)/bin
+
 dtb:
 	@##H## Create all device tree binaries.
 	make -C $(SRC_DEVICETREE) MACHINE=$(MACHINE) install
@@ -109,8 +118,7 @@ bsp:
 libbsd:
 	@##H## Build the libbsd.
 	rm -rf $(SRC_LIBBSD)/build
-	cd $(SRC_LIBBSD) && LDFLAGS="-Wl,--gc-sections" \
-		CFLAGS="-ffunction-sections -fdata-sections" ./waf configure \
+	cd $(SRC_LIBBSD) && ./waf configure \
 		--prefix=$(PREFIX) \
 		--rtems-bsps=$(MACHINE)/$(BSP) \
 		--buildset=$(PROJDIR)/build/src/noipsec.ini \
@@ -118,7 +126,15 @@ libbsd:
 		--optimization=$(OPTIMIZATION) \
 		--rtems-version=6
 	cd $(SRC_LIBBSD) && ./waf
-	#cd $(SRC_LIBBSD) && ./waf install
+	cd $(SRC_LIBBSD) && ./waf install
+
+lvgl:
+	@##H## Build littlevgl.
+	cd $(SRC_LVGL) && python2 ./waf configure \
+		--prefix=$(PREFIX) \
+		--rtems-version=$(RTEMS_VERSION)
+	cd $(SRC_LVGL) && python2 ./waf
+	cd $(SRC_LVGL) && python2 ./waf install
 
 ctags:
 	@##H## Tags for VI
@@ -127,6 +143,15 @@ ctags:
 		"$(SRC_RTEMS)"
 	ctags -a -f $(PROJDIR)/tags --extras=+fq --recurse=yes \
 		--exclude="freebsd-org" "$(SRC_LIBBSD)"
+
+.PHONY: apps
+apps:
+	@##H## Build applications
+	rm -rf $(SRC_APPS)/build
+	cd $(SRC_APPS) && ./waf configure \
+		--prefix=$(PREFIX) \
+		--rtems-version=$(RTEMS_VERSION)
+	cd $(SRC_APPS) && ./waf
 
 zsh:
 	@##H## Start a new shell with a matching environment

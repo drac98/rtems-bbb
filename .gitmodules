@@ -14,3 +14,9 @@
 	path = tools/u-boot
 	url = git://git.denx.de/u-boot.git
 	branch = master
+[submodule "apps/rtems_waf"]
+	path = apps/rtems_waf
+	url = git://git.rtems.org/rtems_waf.git
+[submodule "libs/rtems-littlevgl"]
+	path = libs/rtems-littlevgl
+	url = git://git.rtems.org/packages/rtems-littlevgl/

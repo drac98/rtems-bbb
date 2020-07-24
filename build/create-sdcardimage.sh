@@ -26,16 +26,15 @@
 # covered by the GNU Public License.
 
 # be more verbose
-set -x
+#set -x
 # exit on wrong command and undefined variables
 set -e -u
 
 # find out own directory
 SCRIPTDIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-PROJECTDIR="${SCRIPTDIR}/../"
 
 # configuration
-PREFIX="${PROJECTDIR}/install/rtems/5/"
+PREFIX="${SCRIPTDIR}/../"
 UBOOT_CONFIG="am335x_boneblack_defconfig"
 DTB_INSTALL_NAME="am335x-boneblack.dtb"
 export PATH="${PREFIX}/bin:${PATH}"
@@ -77,7 +76,7 @@ dd if=/dev/zero of=$FATIMG bs=512 seek=`expr $FATSIZE - 1` count=1
 newfs_msdos -r 1 -m 0xf8 -c 4 -F16  -h 64 -u 32 -S 512 -s $FATSIZE -o 0 ./$FATIMG
 
 # Prepare the executable.
-arm-rtems5-objcopy $executable -O binary $TMPDIR/${base}.bin
+arm-rtems6-objcopy $executable -O binary $TMPDIR/${base}.bin
 gzip -9 $TMPDIR/${base}.bin
 mkimage -A arm -O linux -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $TMPDIR/${base}.bin.gz $TMPDIR/$app
 overlays="fdt addr 0x88000000"
