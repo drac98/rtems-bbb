@@ -130,6 +130,7 @@ libbsd:
 
 lvgl:
 	@##H## Build littlevgl.
+	rm -rf $(SRC_LVGL)/build
 	cd $(SRC_LVGL) && python2 ./waf configure \
 		--prefix=$(PREFIX) \
 		--rtems-version=$(RTEMS_VERSION)
