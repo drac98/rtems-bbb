@@ -1,0 +1,13 @@
+import rtems_waf.rtems as rtems
+import rtems_waf.rtems_bsd as rtems_bsd
+import os
+
+def build(bld):
+    rtems.build(bld)
+    bld(features = 'c cprogram',
+        target = 'wifi-sample.exe',
+        source = ['init.c', 'libbsdhelper.c'],
+        lib = ['ftpd', 'bsd', 'm'])
+    bld(rule = "create-sdcardimage.sh ${SRC} ${TGT}",
+        source = "wifi-sample.exe",
+        target = "wifi-sample-sd-image.img")

@@ -40,13 +40,6 @@
 #define BYTES_PER_LINE 32
 
 static bool
-register_bus(void)
-{
-	int rv = bbb_register_i2c_0();
-	return (rv == 0);
-}
-
-static bool
 register_eeprom(void)
 {
 	int rv = i2c_dev_register_eeprom(
@@ -83,7 +76,7 @@ do_hex_dump(void)
 			for (i = 0; i < bytes_read; ++i) {
 				printf("%02X ", buffer[i]);
 				if ((i+1) % BYTES_PER_LINE == 0) {
-					puts("");
+					printf("\n");
 				}
 			}
 		}
@@ -102,8 +95,6 @@ Init(rtems_task_argument arg)
 	bool ok;
 
 	(void)arg;
-	ok = register_bus();
-	assert(ok);
 	ok = register_eeprom();
 	assert(ok);
 	ok = do_hex_dump();

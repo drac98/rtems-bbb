@@ -1,0 +1,13 @@
+import rtems_waf.rtems as rtems
+import rtems_waf.rtems_bsd as rtems_bsd
+import os
+
+def build(bld):
+    rtems.build(bld)
+    bld(features = 'c cprogram',
+        target = 'i2c-test.exe',
+        source = ['init.c'],
+        lib = ['m', 'bsd'])
+    bld(rule = "create-sdcardimage.sh ${SRC} ${TGT}",
+        source = "i2c-test.exe",
+        target = "i2c-test-sd-image.img")
