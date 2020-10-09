@@ -16,8 +16,8 @@ def init(ctx):
 def bsp_configure(conf, arch_bsp):
     rtems_bsd.bsp_configure(conf, arch_bsp, mandatory = False)
     rtems.check_lib_path(conf, lib = 'm')
-    rtems.check_lib_path(conf, lib = 'lvgl')
-    rtems.check_lib_path(conf, lib = 'bsd')
+    rtems.check_lib_path(conf, lib = 'lvgl', mandatory = False)
+    rtems.check_lib_path(conf, lib = 'bsd', mandatory = False)
 
 def options(opt):
     rtems.options(opt)

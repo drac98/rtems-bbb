@@ -431,8 +431,7 @@ Init(rtems_task_argument arg)
 
 #define CONFIGURE_SHELL_USER_COMMANDS \
   &bsp_interrupt_shell_command, \
-  &rtems_shell_ARP_Command, \
-  &rtems_shell_I2C_Command
+  &rtems_shell_ARP_Command
 
 #define CONFIGURE_SHELL_COMMANDS_ALL
 
