@@ -107,7 +107,7 @@ dtb:
 bsp:
 	@##H## Build the BSP.
 	cd $(SRC_RTEMS) && ./waf clean || true
-	cd $(SRC_RTEMS) && ./waf bsp_defaults --rtems-bsps=$(BSP) > config.ini
+	cd $(SRC_RTEMS) && ./waf bsp_defaults --rtems-bsps=$(MACHINE)/$(BSP) > config.ini
 	cd $(SRC_RTEMS) && sed -i \
 		-e "s|RTEMS_POSIX_API = False|RTEMS_POSIX_API = True|" \
 		config.ini
