@@ -110,6 +110,7 @@ bsp:
 	cd $(SRC_RTEMS) && ./waf bsp_defaults --rtems-bsps=$(MACHINE)/$(BSP) > config.ini
 	cd $(SRC_RTEMS) && sed -i \
 		-e "s|RTEMS_POSIX_API = False|RTEMS_POSIX_API = True|" \
+		-e "s|BUILD_TESTS = False|BUILD_TESTS = True|" \
 		config.ini
 	cd $(SRC_RTEMS) && ./waf configure --prefix=$(PREFIX)
 	cd $(SRC_RTEMS) && ./waf
