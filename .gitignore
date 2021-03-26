@@ -5,3 +5,4 @@ tmp_sdcard_dir.20835
 *.dtb
 apps/build
 /apps/.lock*
+/apps/.waf*
