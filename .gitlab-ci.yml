@@ -1,11 +1,11 @@
-image: ubuntu:latest
+image: gcc:11
 
 build-job:
   stage: build
   script:
     - make setup
 
-test-job1:
-  stage: test
-  script:
-    - echo "This job tests something"
+#test-job1:
+#  stage: test
+#  script:
+#    - echo "This job tests something"
