@@ -1,11 +1,18 @@
-image: gcc:11
+image: ubuntu:latest
 
 build-job:
   stage: build
   script:
+    - apt-get install build-essential cmake device-tree-compiler
     - make setup
+    - make apps
 
-#test-job1:
-#  stage: test
-#  script:
-#    - echo "This job tests something"
+package-job:
+  stage: package
+  script:
+    - gzip apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img
+  artifacts:
+    name: wifi-sample-$CI_COMMIT_SHA
+    paths:
+      - apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img.gz
+    expire_in: 1 days
