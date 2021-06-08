@@ -8,7 +8,7 @@ build:
   timeout: 4 hours
   before_script:
     - apt-get -qq update
-    - DEBIAN_FRONTEND=noninteractive TZ=Europe/Berlin apt-get -qq install -y build-essential cmake device-tree-compiler git ctags python
+    - DEBIAN_FRONTEND=noninteractive TZ=Europe/Berlin apt-get -qq install -y build-essential cmake device-tree-compiler git ctags python3 python-is-python3
   script:
     - make setup
     - make apps
