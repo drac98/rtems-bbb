@@ -1,12 +1,58 @@
 image: ubuntu:latest
 
-build-job:
-  stage: build
+stages:
+  - prepare
+  - build-toolchain
+  - build-u-boot
+  - build-helpers
+  - build-bsp
+  - build-libbsd
+  - build-lvgl
+  - build-apps
+
+  - submodule-update toolchain u-boot dtb newfs-msdos partition mtools sd-image-script bsp libbsd lvgl ctags
+
+prepare:
+  stage: prepare
   before_script:
     - apt-get -qq update
     - apt-get -qq install -y build-essential cmake device-tree-compiler
   script:
-    - make setup
+    - make submodule-update
+
+build-toolchain:
+  stage: build-toolchain
+  timeout: 8 hours
+  script:
+    - make toolchain
+
+build-u-boot:
+  stage: build-u-boot
+  script:
+    - make u-boot
+
+build-helpers:
+  stage: build-helpers
+  script:
+    - make dtb newfs-msdos partition mtools sd-image-script
+
+build-bsp:
+  stage: build-bsp
+  script:
+    - make bsp
+
+build-libbsd:
+  stage: build-libbsd
+  script:
+    - make libbsd
+
+build-lvgl:
+  stage: build-lvgl
+  script:
+    - make lvgl
+
+build-apps:
+  stage: build-apps
     - make apps
     - gzip apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img
   artifacts:
