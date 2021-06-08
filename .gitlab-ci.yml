@@ -2,9 +2,10 @@ image: ubuntu:latest
 
 build-job:
   stage: build
+  before_script:
+    - apt-get -qq update
+    - apt-get -qq install -y build-essential cmake device-tree-compiler
   script:
-    - apt-get update
-    - apt-get install build-essential cmake device-tree-compiler
     - make setup
     - make apps
     - gzip apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img
