@@ -53,6 +53,7 @@ build-lvgl:
 
 build-apps:
   stage: build-apps
+  script:
     - make apps
     - gzip apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img
   artifacts:
