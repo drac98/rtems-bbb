@@ -16,7 +16,7 @@ prepare:
   stage: prepare
   before_script:
     - apt-get -qq update
-    - DEBIAN_FRONTEND=noninteractive TZ=Europe/Berlin apt-get -qq install -y build-essential cmake device-tree-compiler
+    - DEBIAN_FRONTEND=noninteractive TZ=Europe/Berlin apt-get -qq install -y build-essential cmake device-tree-compiler git
   script:
     - make submodule-update
 
