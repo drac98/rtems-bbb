@@ -6,10 +6,6 @@ build-job:
     - apt-get install build-essential cmake device-tree-compiler
     - make setup
     - make apps
-
-package-job:
-  stage: package
-  script:
     - gzip apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img
   artifacts:
     name: wifi-sample-$CI_COMMIT_SHA
