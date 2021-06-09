@@ -33,7 +33,7 @@ help:
 	@ grep -B 1 '@##H##' $(firstword $(MAKEFILE_LIST)) \
 		| grep -v grep | grep -v -- "--" | sed -e 's/@##H##//g'
 
-setup: submodule-update toolchain u-boot dtb newfs-msdos partition mtools sd-image-script bsp libbsd lvgl ctags
+setup: submodule-update toolchain u-boot dtb newfs-msdos partition mtools sd-image-script bsp libbsd lvgl
 	@##H## Basic setup. Use with care.
 
 newfs-msdos:
