@@ -1,0 +1,24 @@
+image: ubuntu:latest
+
+stages:
+  - build
+
+build:
+  stage: build
+  timeout: 4 hours
+  before_script:
+    - apt-get -qq update
+    - DEBIAN_FRONTEND=noninteractive TZ=Europe/Berlin apt-get -qq install -y build-essential flex bison texinfo lzop cmake device-tree-compiler git python3 python-is-python3 unzip libpython3-dev python3-dev python2-minimal python2-dev libpython2-dev
+  script:
+    - make setup
+    - make apps
+    - gzip apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img
+    - gzip apps/build/arm-rtems6-beagleboneblack/fb-sample/fb-sample-sd-image.img
+  artifacts:
+    name: wifi-sample-$CI_COMMIT_SHA
+    paths:
+      - apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample.exe
+      - apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img.gz
+      - apps/build/arm-rtems6-beagleboneblack/fb-sample/fb-sample.exe
+      - apps/build/arm-rtems6-beagleboneblack/fb-sample/fb-sample-sd-image.img.gz
+    expire_in: 1 days
