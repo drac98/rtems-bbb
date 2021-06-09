@@ -8,7 +8,7 @@ build:
   timeout: 4 hours
   before_script:
     - apt-get -qq update
-    - DEBIAN_FRONTEND=noninteractive TZ=Europe/Berlin apt-get -qq install -y build-essential flex bison texinfo lzop cmake device-tree-compiler git ctags python3 python-is-python3 unzip libpython3-dev python3-dev python2-minimal python2-dev libpython2-dev
+    - DEBIAN_FRONTEND=noninteractive TZ=Europe/Berlin apt-get -qq install -y build-essential flex bison texinfo lzop cmake device-tree-compiler git python3 python-is-python3 unzip libpython3-dev python3-dev python2-minimal python2-dev libpython2-dev
   script:
     - make setup
     - make apps
