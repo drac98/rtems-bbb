@@ -13,8 +13,12 @@ build:
     - make setup
     - make apps
     - gzip apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img
+    - gzip apps/build/arm-rtems6-beagleboneblack/fb-sample/fb-sample-sd-image.img
   artifacts:
     name: wifi-sample-$CI_COMMIT_SHA
     paths:
+      - apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample.exe
       - apps/build/arm-rtems6-beagleboneblack/wifi-sample/wifi-sample-sd-image.img.gz
+      - apps/build/arm-rtems6-beagleboneblack/fb-sample/fb-sample.exe
+      - apps/build/arm-rtems6-beagleboneblack/fb-sample/fb-sample-sd-image.img.gz
     expire_in: 1 days
