@@ -61,6 +61,8 @@ submodule-update:
 	cd $(SRC_LIBBSD) && git submodule update rtems_waf
 	cd $(SRC_LVGL) && git submodule init
 	cd $(SRC_LVGL) && git submodule update
+	cd $(SRC_APPS) && git submodule init rtems_waf
+	cd $(SRC_APPS) && git submodule update rtems_waf
 
 toolchain:
 	@##H## Build the toolchain.
