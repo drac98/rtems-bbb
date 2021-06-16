@@ -124,6 +124,7 @@ libbsd:
 	cd $(SRC_LIBBSD) && ./waf configure \
 		--prefix=$(PREFIX) \
 		--rtems-bsps=$(MACHINE)/$(BSP) \
+		--buildset=buildset \
 		--buildset=$(PROJDIR)/build/src/noipsec.ini \
 		--enable-warnings \
 		--optimization=$(OPTIMIZATION) \
